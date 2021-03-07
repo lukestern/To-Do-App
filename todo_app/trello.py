@@ -20,19 +20,7 @@ class Trello:
             # return json.dumps(resp.json(), indent=4)
             return resp.json()
 
-    def get_board(self):
-        url = f"boards/{self.board}"
-        return self.get_and_check_response(url)
-        
-    def get_card(self, card_id):
-        url = f"boards/{self.board}/cards/{card_id}"
-        return self.get_and_check_response(url)
-
-    def get_all_boards_by_user_membership(self):
-        url = f"members/{self.username}/boards"
-        return self.get_and_check_response(url)
-
-    def get_card_list(self):
+    def get_card_list_ids(self):
         url = f"boards/{self.board}/lists"
         result = self.get_and_check_response(url)
         if result:
