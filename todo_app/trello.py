@@ -36,7 +36,7 @@ class Trello:
 
     def get_all_cards(self):
         list_ids = self.get_card_list_ids()
-        cards_in_lists = [self.get_cards_in_a_list(list_ids[key]) for key in list_ids]
+        cards_in_lists = [self.get_cards_from_a_list(list_ids[key]) for key in list_ids]
         return list(itertools.chain.from_iterable(cards_in_lists))
 
     def update_card(self, card_id, update_dictionary):
