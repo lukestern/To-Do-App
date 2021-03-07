@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import requests
+import itertools
 import json
 import os 
 
@@ -29,12 +30,15 @@ class Trello:
                 lists[lis['name']] = lis['id']
             return  lists
 
-    def get_cards_in_a_list(self, list_id):
+    def get_cards_from_a_list(self, list_id):
         url = f"lists/{list_id}/cards"
         return self.get_and_check_response(url)
+
+    def get_all_cards(self):
+        list_ids = self.get_card_list_ids()
+        cards_in_lists = [self.get_cards_in_a_list(list_ids[key]) for key in list_ids]
+        return list(itertools.chain.from_iterable(cards_in_lists))
 
     def update_card(self, card_id, update_dictionary):
         url = f"cards/{card_id}"
         return self.get_and_check_response(url)
-
-    
