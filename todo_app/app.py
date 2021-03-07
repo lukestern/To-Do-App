@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 @app.route('/')
-def index(all=True):
-    return render_template('index.html', tasks = get_items(), all=all)
+def index():
+    return render_template('index.html', tasks = get_items())
 
 @app.route('/sortby/<sort>')
 def sortby(sort):
