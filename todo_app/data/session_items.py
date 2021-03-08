@@ -3,8 +3,6 @@ from todo_app.trello import Trello
 
 global t
 t = Trello()
-_DEFAULT_ITEMS = t.get_all_cards()
-
 
 
 def get_items():
@@ -14,8 +12,8 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
+    _DEFAULT_ITEMS = t.get_all_cards()
     return session.get('items', _DEFAULT_ITEMS)
-
 
 def get_item(id):
     """
@@ -28,8 +26,8 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == id), None)
 
+    return next((item for item in items if item['id'] == id), None)
 
 def add_item(title):
     """
@@ -47,7 +45,6 @@ def add_item(title):
 
     return title
 
-
 def save_item(item):
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
@@ -56,8 +53,7 @@ def save_item(item):
         item: The item to save.
     """
     t.move_card_to_list(item['id'], item['status'])
-    session['items'] = t.get_all_cards()
-
+    session['items'] = get_items()
     return item
 
 def remove_item(item):
@@ -71,4 +67,3 @@ def remove_item(item):
     session['items'] = t.get_all_cards()
 
     return item
-
