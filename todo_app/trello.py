@@ -33,7 +33,7 @@ class Trello:
             lists = {}
             for lis in result:
                 lists[lis['name']] = lis['id']
-            return  lists
+            return lists
 
     def get_cards_from_a_list(self, list_id):
         '''
@@ -49,14 +49,8 @@ class Trello:
     def get_all_cards(self):
         cards_in_lists = [self.get_cards_from_a_list(self.list_ids[key]) for key in self.list_ids]
         card_list = list(itertools.chain.from_iterable(cards_in_lists))
-        return self.add_status_to_cards_in_list(card_list)
-
-    def add_status_to_cards_in_list(self, card_list):
-        for card in card_list:
-            for key, value in self.list_ids.items():
-                if card['idList'] == value:
-                    card['status'] = key
-        return card_list
+        tasks = [Task(card, self.list_ids) for card in card_list]
+        return tasks
 
     def move_card_to_list(self, card_id, card_status):
         data = dict(idList = self.list_ids[card_status])
@@ -71,3 +65,17 @@ class Trello:
     def delete_card(self, card_id):
         url = f"cards/{card_id}"
         return self.make_api_call_and_check_response(url, method='delete')
+
+
+class Task:
+    def __init__(self, trello_card_dict, list_ids):
+        self.list_ids = list_ids
+        self.id = trello_card_dict['id']
+        self.title = trello_card_dict['name']
+        self.idList = trello_card_dict['idList']
+        self.status = self.get_status_from_list_id()
+
+    def get_status_from_list_id(self):
+        for key, value in self.list_ids.items():
+            if self.idList == value:
+                return key
