@@ -1,8 +1,8 @@
+from werkzeug.exceptions import HTTPException
 from types import MethodDescriptorType
 from dotenv import load_dotenv
 import requests
 import itertools
-import json
 import os 
 
 
@@ -15,12 +15,13 @@ class Trello:
         self.board = os.environ.get('TRELLO_BOARD_ID')
         self.list_ids = self.get_card_list_ids()
 
-    def make_api_call_and_check_response(self, url, method='get', data=None):
-        complete_url = f"{self.url}" + url + f"?key={self.key}&token={self.token}"
-        resp = eval("requests." + method.lower() + "('" + complete_url + "', data=" + str(data) + ")")
-        if resp.status_code == 200:
-            # print(json.dumps(resp.json(), indent=4))
+    def make_api_call_and_check_response(self, path, method='get', data=None):
+        complete_url = f"{self.url}" + path + f"?key={self.key}&token={self.token}"
+        resp = requests.request(method, complete_url, data=data)
+        if resp.ok:
             return resp.json()
+        else:
+            raise HTTPException(f'API call to Trello failed. Error code {resp.status_code}')
 
     def get_card_list_ids(self):
         '''
@@ -68,13 +69,12 @@ class Trello:
 
 class Task:
     def __init__(self, trello_card_dict, list_ids):
-        self.list_ids = list_ids
         self.id = trello_card_dict['id']
         self.title = trello_card_dict['name']
         self.idList = trello_card_dict['idList']
-        self.status = self.get_status_from_list_id()
+        self.status = self.get_status_from_list_id(list_ids)
 
-    def get_status_from_list_id(self):
-        for key, value in self.list_ids.items():
+    def get_status_from_list_id(self, list_ids):
+        for key, value in list_ids.items():
             if self.idList == value:
                 return key

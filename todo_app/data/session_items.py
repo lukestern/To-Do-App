@@ -1,4 +1,3 @@
-from flask import session
 from todo_app.trello import Trello
 
 global t
@@ -12,8 +11,8 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-    _DEFAULT_ITEMS = t.get_all_cards()
-    return session.get('items', _DEFAULT_ITEMS)
+   
+    return t.get_all_cards()
 
 def get_item(id):
     """
@@ -27,7 +26,7 @@ def get_item(id):
     """
     items = get_items()
 
-    return next((item for item in items if item['id'] == id), None)
+    return next((item for item in items if item.id == id), None)
 
 def add_item(title):
     """
@@ -41,7 +40,6 @@ def add_item(title):
     """
 
     t.create_new_card(title)
-    session['items'] = t.get_all_cards()
 
     return title
 
@@ -52,8 +50,7 @@ def save_item(item):
     Args:
         item: The item to save.
     """
-    t.move_card_to_list(item['id'], item['status'])
-    session['items'] = get_items()
+    t.move_card_to_list(item.id, item.status)
     return item
 
 def remove_item(item):
@@ -63,7 +60,6 @@ def remove_item(item):
     Args:
         item: The item to remove.
     """
-    t.delete_card(item['id'])
-    session['items'] = t.get_all_cards()
+    t.delete_card(item.id)
 
     return item
