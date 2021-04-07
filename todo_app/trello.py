@@ -11,9 +11,8 @@ class Trello:
         load_dotenv()
         self.key = os.environ.get('TRELLO_KEY')
         self.token = os.environ.get('TRELLO_TOKEN')
-        self.url = os.environ.get('TRELLO_BASE_URL')
+        self.url = 'https://api.trello.com/1/'
         self.board = os.environ.get('TRELLO_BOARD_ID')
-        self.username = os.environ.get('TRELLO_USER')
         self.list_ids = self.get_card_list_ids()
 
     def make_api_call_and_check_response(self, url, method='get', data=None):
