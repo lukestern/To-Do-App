@@ -19,45 +19,19 @@
   </div>
   <div class="row-12 mb-4">
     <div class="col-12 mb-3">
-      <ul class="list-group list-group-horizontal col-4 mb-3">
-        <div class="dropdown col-4">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Tasks
-          </button>
-          <div class="dropdown-menu mb-3" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/view/all">All</a>
-            <a class="dropdown-item" href="/view/todo">To Do</a>
-            <a class="dropdown-item" href="/view/started">In Progress</a>
-            <a class="dropdown-item" href="/view/complete">Done</a>
-          </div>
-        </div>
-        <div class="dropdown col-4">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Sort By
-          </button>
-          <div class="dropdown-menu mb-3" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/sortby/todo">To Do -> Done</a>
-            <a class="dropdown-item" href="/sortby/done">Done -> To Do</a>
-          </div>
-        </div>
-      </ul>
-      <ul class="list-group mb-0">
+      
+      <ul class="list-group mb-0 col-12">
+        <ul class="list-group col-3 mb-2">
+          <h2><span class="badge bg-danger text-light text-center">Not Started</span></h2>
+        </ul>
         <ul class="list-group col-12 mb-2">
-        {% for task in tasks %}
+        {% for task in view_model.not_started_tasks %}
         <li class="list-group-item"> 
           <div class="row justify-content-between">
-            {% if 'Not Started' in task.status %}
-            <div class="col-sm-2 text-danger" style="border-radius: 5px;">{{ task.status }}</div>
-            {% elif 'In Progress' in task.status %}
-            <div class="col-sm-2 text-warning" style="border-radius: 5px;">{{ task.status }}</div>
-            {% elif 'Complete' in task.status %}
-            <div class="col-sm-2 text-success" style="border-radius: 5px;">{{ task.status }}</div>
-            {% endif %}
             <div class="col-sm-6" style="border-radius: 5px;">{{ task.title }}</div>
             <div class="col-sm-2">
               <div class='row'>
                 <div class="col-8 col-sm-6">
-                  {% if 'Not Started' in task.status %}
                   <form action="/start/{{ task.id }}">
                       <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
                     </form>
@@ -66,25 +40,6 @@
                     <form action="/finish/{{ task.id }}">
                       <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
                     </form>
-                    {% elif 'In Progress' in task.status %}
-                    <form action="/stop/{{ task.id }}">
-                      <button class="btn btn-outline-danger" style="border-radius: 5px;" type="submit" value="Submit">Stop</button>
-                    </form>
-                  </div>
-                  <div class="col-4 col-sm-6">
-                    <form action="/finish/{{ task.id }}">
-                      <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
-                    </form>
-                    {% elif 'Complete' in task.status %}
-                    <form action="/start/{{ task.id }}">
-                      <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
-                    </form>
-                  </div>
-                  <div class="col-4 col-sm-6">
-                    <form action="/delete/{{ task.id }}">
-                      <button class="btn btn-outline-secondary" style="border-radius: 5px;" type="submit" value="Submit">Delete</button>
-                    </form>
-                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -92,6 +47,61 @@
           </li>
           {% endfor %}
         </ul>
+
+        <ul class="list-group col-12 mb-2">
+          <h2><span class="badge bg-warning text-light text-center">In Progress</span></h2>
+        </ul>
+        <ul class="list-group col-12 mb-2">
+        {% for task in view_model.in_progress_tasks %}
+        <li class="list-group-item"> 
+          <div class="row justify-content-between">
+            <div class="col-sm-6" style="border-radius: 5px;">{{ task.title }}</div>
+            <div class="col-sm-2">
+              <div class='row'>
+                <div class="col-8 col-sm-6">
+                  <form action="/stop/{{ task.id }}">
+                    <button class="btn btn-outline-danger" style="border-radius: 5px;" type="submit" value="Submit">Stop</button>
+                  </form>
+                </div>
+                <div class="col-4 col-sm-6">
+                  <form action="/finish/{{ task.id }}">
+                    <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <ul class="list-group col-12 mb-2">
+          <h2><span class="badge bg-success text-light text-center">Complete</span></h2>
+        </ul>
+        <ul class="list-group col-12 mb-2">
+        {% for task in view_model.complete_tasks %}
+        <li class="list-group-item"> 
+          <div class="row justify-content-between">
+            <div class="col-sm-6" style="border-radius: 5px;">{{ task.title }}</div>
+            <div class="col-sm-2">
+              <div class='row'>
+                <div class="col-8 col-sm-6">
+                  <form action="/start/{{ task.id }}">
+                    <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
+                  </form>
+                </div>
+                <div class="col-4 col-sm-6">
+                  <form action="/delete/{{ task.id }}">
+                    <button class="btn btn-outline-secondary" style="border-radius: 5px;" type="submit" value="Submit">Delete</button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
       </ul>
     </div>
   </div>

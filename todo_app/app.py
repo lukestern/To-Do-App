@@ -2,35 +2,16 @@ from flask import Flask, render_template, url_for, redirect
 from flask.globals import request
 from todo_app.data.session_items import get_item, get_items, add_item, save_item, remove_item
 from todo_app.trello import Task
+from todo_app.views import ViewModel
 
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks = get_items())
-
-@app.route('/sortby/<sort>')
-def sortby(sort):
-    items = get_items()
-    if 'done' in sort:
-        tasks = sorted(items, key=lambda k: k.status) 
-    elif 'todo' in sort:
-        tasks = sorted(items, key=lambda k: k.status, reverse=True) 
-    return render_template('index.html', tasks = tasks, all=True)
-
-@app.route('/view/<type>')
-def view_task_type(type):
-    items = get_items()
-    if 'all' in type:
-        return redirect(url_for('index'))
-    elif 'complete' in type:
-        tasks = [item for item in items if 'Complete' in item.status]
-    elif 'started' in type:
-        tasks = [item for item in items if 'In Progress' in item.status]
-    elif 'todo' in type:
-        tasks = [item for item in items if 'Not Started' in item.status]
-    return render_template('index.html', tasks = tasks, all = False)
+    tasks = get_items()
+    task_view_model = ViewModel(tasks)
+    return render_template('index.html', view_model = task_view_model)
 
 @app.route('/add_new', methods=['POST'])    
 def add_new():
