@@ -47,11 +47,11 @@
         <li class="list-group-item"> 
           <div class="row justify-content-between">
             {% if 'Not Started' in task.status %}
-            <div class="col-sm-1 text-danger" style="border-radius: 5px;">{{ task.status }}</div>
+            <div class="col-sm-2 text-danger" style="border-radius: 5px;">{{ task.status }}</div>
             {% elif 'In Progress' in task.status %}
-            <div class="col-sm-1 text-warning" style="border-radius: 5px;">{{ task.status }}</div>
+            <div class="col-sm-2 text-warning" style="border-radius: 5px;">{{ task.status }}</div>
             {% elif 'Complete' in task.status %}
-            <div class="col-sm-1 text-success" style="border-radius: 5px;">{{ task.status }}</div>
+            <div class="col-sm-2 text-success" style="border-radius: 5px;">{{ task.status }}</div>
             {% endif %}
             <div class="col-sm-6" style="border-radius: 5px;">{{ task.title }}</div>
             <div class="col-sm-2">
