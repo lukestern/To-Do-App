@@ -1,6 +1,6 @@
 from werkzeug.exceptions import HTTPException
-from types import MethodDescriptorType
 from dotenv import load_dotenv
+from datetime import datetime
 import requests
 import itertools
 import os 
@@ -43,7 +43,7 @@ class Trello:
         result = self.make_api_call_and_check_response(url)
         cards = []
         for res in result:
-            cards.append(dict((k, res[k]) for k in ('id', 'name', 'idList') if k in res))
+            cards.append(dict((k, res[k]) for k in ('id', 'name', 'idList', 'dateLastActivity') if k in res))
         return cards
 
     def get_all_cards(self):
@@ -72,6 +72,7 @@ class Task:
         self.id = trello_card_dict['id']
         self.title = trello_card_dict['name']
         self.idList = trello_card_dict['idList']
+        self.last_active = datetime.strptime(trello_card_dict['dateLastActivity'], '%Y-%m-%dT%H:%M:%S.%fZ')
         self.status = self.get_status_from_list_id(list_ids)
 
     def get_status_from_list_id(self, list_ids):
