@@ -1,10 +1,4 @@
-from todo_app.trello import Trello
-
-global t
-t = Trello()
-
-
-def get_items():
+def get_items(trello):
     """
     Fetches all saved items from the session.
 
@@ -12,9 +6,9 @@ def get_items():
         list: The list of saved items.
     """
    
-    return t.get_all_cards()
+    return trello.get_all_cards()
 
-def get_item(id):
+def get_item(trello, id):
     """
     Fetches the saved item with the specified ID.
 
@@ -24,11 +18,11 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
-    items = get_items()
+    items = get_items(trello)
 
     return next((item for item in items if item.id == id), None)
 
-def add_item(title):
+def add_item(trello, title):
     """
     Adds a new item with the specified title to the session.
 
@@ -39,27 +33,27 @@ def add_item(title):
         item: The saved item.
     """
 
-    t.create_new_card(title)
+    trello.create_new_card(title)
 
     return title
 
-def save_item(item):
+def save_item(trello, item):
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
 
     Args:
         item: The item to save.
     """
-    t.move_card_to_list(item.id, item.status)
+    trello.move_card_to_list(item.id, item.status)
     return item
 
-def remove_item(item):
+def remove_item(trello, item):
     """
     Removes an existing item in the session. If no existing item matches the ID of the specified item, nothing is removed.
 
     Args:
         item: The item to remove.
     """
-    t.delete_card(item.id)
+    trello.delete_card(item.id)
 
     return item
