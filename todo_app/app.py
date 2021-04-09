@@ -32,20 +32,20 @@ def create_app():
     def start_task(id):
         task = get_item(trello, id)
         task.status = 'In Progress'
-        save_item(task)
+        save_item(trello, task)
         return redirect(url_for('index'))
 
     @app.route('/stop/<id>')
     def stop_task(id):
         task = get_item(trello, id)
         task.status = 'Not Started'
-        save_item(task)
+        save_item(trello, task)
         return redirect(url_for('index'))
 
     @app.route('/delete/<id>')
     def delete_task(id):
         task = get_item(trello, id)
-        remove_item(task)
+        remove_item(trello, task)
         return redirect(url_for('index'))
     
     return app

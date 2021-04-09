@@ -66,6 +66,28 @@ class Trello:
         path = f"cards/{card_id}"
         return self.make_api_call_and_check_response(path, method='delete')
 
+    def create_board_with_lists(self, name):
+        board = self.create_board(name)
+        names = ['Not Started', 'In Progress', 'Complete']
+        for name in names:
+            self.create_list(board['id'], name)
+
+        return board
+
+    def create_board(self, name):
+        data = dict(name = name)
+        path = f"boards"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
+
+    def delete_board(self, board_id):
+        path = f"boards/{board_id}"
+        return self.make_api_call_and_check_response(path, method='delete')
+
+    def create_list(self, board_id, name):
+        data = dict(name = name)
+        path = f"boards/{board_id}/lists"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
+
 
 class Task:
     def __init__(self, trello_card_dict, list_ids):
