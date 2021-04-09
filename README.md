@@ -30,7 +30,7 @@ You'll also need to clone a new `.env` file from the `.env.template` to store lo
 $ cp .env.template .env  # (first time only)
 ```
 
-# Trello Setup 
+### Trello Setup 
 
 Trello is used to store the tasks displayed in the app. 
 - Set up an account on Trello. https://trello.com/signup

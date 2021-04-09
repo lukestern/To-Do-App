@@ -1,47 +1,8 @@
-from todo_app.trello import Task
 from todo_app.views import ViewModel
-from datetime import datetime
-
-
-# Test data.
-list_ids = {'Not Started': 'a', 'In Progress': 'b', 'Complete': 'c'}
-
-previous_date = '2021-04-07T11:55:29.179000Z'
-today = datetime.today()
-todays_date = today.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-
-trello_card_dicts = [
-    {'id': '1', 'name': 'Test-1', 'idList': 'a', 'status': 'Not Started', 'dateLastActivity': previous_date},
-    {'id': '2', 'name': 'Test-2', 'idList': 'b', 'status': 'In Progress', 'dateLastActivity': previous_date},
-    {'id': '3', 'name': 'Test-3', 'idList': 'c', 'status': 'Complete', 'dateLastActivity': previous_date}
-]
-
-
-# Functions to generate test task objects.
-def get_complete_test_tasks(n):
-    # Produces 2n tasks. Half completed today, half completed on previous date.
-    complete_card_dicts = []
-    for i in range(0, 2*n):
-        if i in range(0, n):
-            complete_card_dicts.append(
-                {'id': str(i), 'name': f'Test-{i}', 'idList': 'c', 'status': 'Complete', 'dateLastActivity': previous_date}
-            )
-        elif i in range(n, 2*n+1):
-            complete_card_dicts.append(
-                {'id': str(i), 'name': f'Test-{i}', 'idList': 'c', 'status': 'Complete', 'dateLastActivity': todays_date}
-            )
-    return get_test_tasks(complete_card_dicts)
-
-def get_test_tasks(task_dicts):
-    # Takes list of Trello dictionaries and returns list of Task Objects.
-    tasks = []
-    for card_dict in task_dicts:
-        tasks.append(Task(card_dict, list_ids))
-    return tasks
-
+from tests.data import previous_date, todays_date, today, trello_card_dicts, get_complete_test_tasks, get_test_task_objects
 
 def test_return_all_cards():
-    tasks = get_test_tasks(trello_card_dicts)
+    tasks = get_test_task_objects(trello_card_dicts)
 
     result = ViewModel(tasks).tasks
 
@@ -56,7 +17,7 @@ def test_return_all_cards_returns_none():
     assert result == []
 
 def test_return_not_started_tasks():
-    tasks = get_test_tasks(trello_card_dicts)
+    tasks = get_test_task_objects(trello_card_dicts)
 
     result = ViewModel(tasks).not_started_tasks
 
@@ -73,7 +34,7 @@ def test_return_no_not_started_tasks():
 
 
 def test_return_in_progress_tasks():
-    tasks = get_test_tasks(trello_card_dicts)
+    tasks = get_test_task_objects(trello_card_dicts)
 
     result = ViewModel(tasks).in_progress_tasks
 
@@ -100,7 +61,7 @@ def test_less_than_5_complete_tasks():
     assert not ViewModel(tasks).more_than_5_complete_tasks
 
 def test_return_complete_tasks():
-    tasks = get_test_tasks(trello_card_dicts)
+    tasks = get_test_task_objects(trello_card_dicts)
 
     result = ViewModel(tasks).complete_tasks
 

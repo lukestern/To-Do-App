@@ -27,8 +27,8 @@ class Trello:
         '''
         Returns a dictionary where keys are the list names and the values are list ids.
         '''
-        url = f"boards/{self.board}/lists"
-        result = self.make_api_call_and_check_response(url)
+        path = f"boards/{self.board}/lists"
+        result = self.make_api_call_and_check_response(path)
         if result:
             lists = {}
             for lis in result:
@@ -39,8 +39,8 @@ class Trello:
         '''
         Returns list of card dictionaries.
         '''
-        url = f"lists/{list_id}/cards"
-        result = self.make_api_call_and_check_response(url)
+        path = f"lists/{list_id}/cards"
+        result = self.make_api_call_and_check_response(path)
         cards = []
         for res in result:
             cards.append(dict((k, res[k]) for k in ('id', 'name', 'idList', 'dateLastActivity') if k in res))
@@ -54,17 +54,17 @@ class Trello:
 
     def move_card_to_list(self, card_id, card_status):
         data = dict(idList = self.list_ids[card_status])
-        url = f"cards/{card_id}"
-        return self.make_api_call_and_check_response(url, method='put', data=data)
+        path = f"cards/{card_id}"
+        return self.make_api_call_and_check_response(path, method='put', data=data)
 
     def create_new_card(self, name):
         data = dict(idList = self.list_ids['Not Started'], name = name)
-        url = f"cards"
-        return self.make_api_call_and_check_response(url, method='post', data=data)
+        path = f"cards"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
 
     def delete_card(self, card_id):
-        url = f"cards/{card_id}"
-        return self.make_api_call_and_check_response(url, method='delete')
+        path = f"cards/{card_id}"
+        return self.make_api_call_and_check_response(path, method='delete')
 
 
 class Task:
