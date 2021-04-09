@@ -59,7 +59,7 @@ list_ids_trello_response = [
         "idBoard": "fake_id"
     },
     {
-        "id": "a",
+        "id": "b",
         "name": "In Progress",
         "idBoard": "fake_id"
     },
