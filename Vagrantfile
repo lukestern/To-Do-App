@@ -34,7 +34,7 @@ echo 'Installing TO-DO App dependencies.'
 poetry install
 
 echo ' Launching App.'
-poetry run flask run --host=0.0.0.0
+sudo -u vagrant poetry run gunicorn -b 0.0.0.0:5000 'todo_app.app:create_app()'
 
 SCRIPT
 
