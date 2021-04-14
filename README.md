@@ -39,12 +39,20 @@ Trello is used to store the tasks displayed in the app.
 - Create a Trello board. https://trello.com/en-GB/guide/create-a-board
 - Add your board ID to .env. This can be found in the URL of your board. (https://trello.com/b/<board_id>/to-do-app)
 
+### VirtualBox
+
+- Install VirtualBox. https://www.virtualbox.org/
+
+### Vagrant
+
+- Install Vagrant. https://www.vagrantup.com/downloads
+
 
 ## Running the App
 
 Once the all dependencies have been installed, start the Flask app in development mode within the poetry environment by running:
 ```bash
-$ poetry run flask run
+$ vagrant up
 ```
 
 You should see output similar to the following:
@@ -52,7 +60,7 @@ You should see output similar to the following:
  * Serving Flask app "app" (lazy loading)
  * Environment: development
  * Debug mode: on
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
  * Restarting with fsevents reloader
  * Debugger is active!
  * Debugger PIN: 226-556-590
