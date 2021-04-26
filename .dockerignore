@@ -1,0 +1,15 @@
+.git
+.github/
+.pytest_cache/
+.vagrant/
+.vscode/
+.venv/
+
+__pycache__
+.env
+.env.template
+.env.test
+.gitignore
+geckodriver.exe
+geckodriver.log
+Vagrantfile
