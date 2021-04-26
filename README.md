@@ -47,12 +47,23 @@ Trello is used to store the tasks displayed in the app.
 
 - Install Vagrant. https://www.vagrantup.com/downloads
 
+### Docker 
 
-## Running the App
+- Install Docker. https://docs.docker.com/get-docker/
 
+
+## Running the App (Development)
 Once the all dependencies have been installed, start the Flask app in development mode within the poetry environment by running:
+
+### Option 1 - Vagrant
 ```bash
 $ vagrant up
+```
+
+### Option 2 - Docker
+```bash
+docker build --target development --tag todo-app:dev . 
+docker run -p 5000:5000 --env-file ./.env --mount type=bind,source="$(pwd)"/todo_app,target=/app/todo_app todo-app:dev
 ```
 
 You should see output similar to the following:
@@ -66,3 +77,9 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Running the App (Production)
+```bash
+docker build --target production --tag todo-app:prod . 
+docker run -d -p 5000:5000 --env-file ./.env todo-app:dev
+```
