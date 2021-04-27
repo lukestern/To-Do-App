@@ -1,98 +1,84 @@
 {% extends "layout.html" %}
 {% block title %}To-Do App{% endblock %}
 
+{% macro display_tasks(tasks) %}
+<ul class="list-group col-12 mb-2">
+  {% for task in tasks %}
+  <li class="list-group-item"> 
+    <div class="row justify-content-between">
+      <div class="col-sm-6" style="border-radius: 5px;">
+        {{ task.title }}
+      </div>
+      <div class='row col-3'>
+        <div class="col-sm-4">
+          {% if 'Not Started' in task.status or 'Complete' in task.status %}
+          <form action="/start/{{ task.id }}">
+            <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
+          </form>
+          {% elif 'In Progress' in task.status %}
+          <form action="/stop/{{ task.id }}">
+            <button class="btn btn-outline-danger" style="border-radius: 5px;" type="submit" value="Submit">Stop</button>
+          </form>
+          {% endif %}
+        </div>
+        <div class="col-sm-2">
+          {% if 'Not Started' in task.status or 'In Progress' in task.status%}
+          <form action="/finish/{{ task.id }}">
+            <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
+          </form>
+          {% elif 'Complete' in task.status %}
+          <form action="/delete/{{ task.id }}">
+            <button class="btn btn-outline-secondary" style="border-radius: 5px;" type="submit" value="Submit">Delete</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+
 {% block content %}
   <div class="jumbotron jumbotron-fluid" style="border-radius: 5px;">
     <h1 class="display-4 ml-4">To-Do App</h1>
     <hr class="my-6 ml-4 mr-4">
     <p class="lead ml-4">Just another to-do app.</p>
   </div>
+
   <div>
     <form action="/add_new" method="post">
         <div class="input-group mb-3">
-          <input type="text" id="new_task" name="new_task" class="form-control" required placeholder="New Task" >
+          <input type="text" id="new_task" name="new_task" class="form-control" required placeholder="New Task">
           <div class="input-group-append">
             <button class="btn btn-primary" type="submit" id="newTaskButton" value="Submit">Add</button>
           </div>
         </div>
     </form>
   </div>
-  <div class="row-12 mb-4">
-    <div class="col-12 mb-3">
-      <ul class="list-group list-group-horizontal col-4 mb-3">
-        <div class="dropdown col-4">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Tasks
-          </button>
-          <div class="dropdown-menu mb-3" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/view/all">All</a>
-            <a class="dropdown-item" href="/view/todo">To Do</a>
-            <a class="dropdown-item" href="/view/started">In Progress</a>
-            <a class="dropdown-item" href="/view/complete">Done</a>
-          </div>
-        </div>
-        <div class="dropdown col-4">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Sort By
-          </button>
-          <div class="dropdown-menu mb-3" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/sortby/todo">To Do -> Done</a>
-            <a class="dropdown-item" href="/sortby/done">Done -> To Do</a>
-          </div>
-        </div>
-      </ul>
-      <ul class="list-group mb-0">
-        <ul class="list-group col-12 mb-2">
-        {% for task in tasks %}
-        <li class="list-group-item"> 
-          <div class="row justify-content-between">
-            {% if 'Not Started' in task.status %}
-            <div class="col-sm-2 text-danger" style="border-radius: 5px;">{{ task.status }}</div>
-            {% elif 'In Progress' in task.status %}
-            <div class="col-sm-2 text-warning" style="border-radius: 5px;">{{ task.status }}</div>
-            {% elif 'Complete' in task.status %}
-            <div class="col-sm-2 text-success" style="border-radius: 5px;">{{ task.status }}</div>
-            {% endif %}
-            <div class="col-sm-6" style="border-radius: 5px;">{{ task.title }}</div>
-            <div class="col-sm-2">
-              <div class='row'>
-                <div class="col-8 col-sm-6">
-                  {% if 'Not Started' in task.status %}
-                  <form action="/start/{{ task.id }}">
-                      <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
-                    </form>
-                  </div>
-                  <div class="col-4 col-sm-6">
-                    <form action="/finish/{{ task.id }}">
-                      <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
-                    </form>
-                    {% elif 'In Progress' in task.status %}
-                    <form action="/stop/{{ task.id }}">
-                      <button class="btn btn-outline-danger" style="border-radius: 5px;" type="submit" value="Submit">Stop</button>
-                    </form>
-                  </div>
-                  <div class="col-4 col-sm-6">
-                    <form action="/finish/{{ task.id }}">
-                      <button class="btn btn-outline-success" style="border-radius: 5px;" type="submit" value="Submit">Finish</button>
-                    </form>
-                    {% elif 'Complete' in task.status %}
-                    <form action="/start/{{ task.id }}">
-                      <button class="btn btn-outline-warning" style="border-radius: 5px;" type="submit" value="Submit">Start</button>
-                    </form>
-                  </div>
-                  <div class="col-4 col-sm-6">
-                    <form action="/delete/{{ task.id }}">
-                      <button class="btn btn-outline-secondary" style="border-radius: 5px;" type="submit" value="Submit">Delete</button>
-                    </form>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </ul>
-    </div>
+
+  <div class="row-8 mb-4">
+    <h2><span class="badge bg-danger text-light text-center">Not Started</span></h2>
+      {{ display_tasks(view_model.not_started_tasks) }}
   </div>
+
+  <div class="row-8 mb-4">
+    <h2><span class="badge bg-warning text-light text-center">In Progress</span></h2>
+      {{ display_tasks(view_model.in_progress_tasks) }}
+  </div>
+      
+  <div class="row-8 mb-4">
+    <h2><span class="badge bg-success text-light text-center">Complete</span></h2>
+      {{ display_tasks(view_model.complete_tasks) }}
+
+    {% if view_model.more_than_5_complete_tasks %}
+    <details>
+      <summary class="badge bg-success text-light text-center mb-3 align-bottom">
+        <h6><span>View All Complete Tasks</span></h6>
+      </summary>
+      {{ display_tasks(view_model.older_tasks) }}
+    </details>
+    {% endif %}
+  </div>
+
 {% endblock %}
