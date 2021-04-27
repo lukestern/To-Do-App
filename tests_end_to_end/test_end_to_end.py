@@ -42,26 +42,26 @@ def test_task_journey(driver, test_app):
     new_task_input.send_keys(task_title)
     new_task_input.send_keys(Keys.RETURN)
     time.sleep(2)
-    assert check_task_displayed_with_correct_status(driver, 'Not Started', task_title)
+    assert check_task_displayed_under_correct_status_heading(driver, 'Not Started', task_title)
 
     # Start task
     start_button = get_button(driver, 'Start')
     start_button.click()
     time.sleep(2)
-    assert check_task_displayed_with_correct_status(driver, 'In Progress', task_title)
+    assert check_task_displayed_under_correct_status_heading(driver, 'In Progress', task_title)
 
 
     # Stop task
     stop_button = get_button(driver, 'Stop')
     stop_button.click()
     time.sleep(2)
-    assert check_task_displayed_with_correct_status(driver, 'Not Started', task_title)
+    assert check_task_displayed_under_correct_status_heading(driver, 'Not Started', task_title)
 
 
     # Finish task
     finish_button = get_button(driver, 'Finish')
     finish_button.click()
-    assert check_task_displayed_with_correct_status(driver, 'Complete', task_title)
+    assert check_task_displayed_under_correct_status_heading(driver, 'Complete', task_title)
 
     # Delete task
     delete_button = get_button(driver, 'Delete')
