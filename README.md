@@ -52,12 +52,11 @@ Trello is used to store the tasks displayed in the app.
 - Install Docker. https://docs.docker.com/get-docker/
 
 
-## Running the App (Development)
-Once the all dependencies have been installed, start the Flask app in development mode.
+## Running the App (Production)
 
-### Option 1 - Poetry
+### Option 1 - Docker
 ```bash
-poetry run flask run
+docker compose up --build
 ```
 
 ### Option 2 - Vagrant
@@ -65,9 +64,18 @@ poetry run flask run
 $ vagrant up
 ```
 
-### Option 3 - Docker
+
+## Running the App (Development)
+Once the all dependencies have been installed, start the Flask app in development mode.
+
+### Option 1 - Docker
 ```bash
 docker compose -f .\docker-compose-dev.yml up --build
+```
+
+### Option 2 - Poetry
+```bash
+poetry run flask run
 ```
 
 You should see output similar to the following:
@@ -82,7 +90,19 @@ You should see output similar to the following:
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
-## Running the App (Production)
+
+## Running Tests
+
+### Option 1 - Poetry
 ```bash
-docker compose up --build
+# Unit and Integration tests
+poetry run pytest .\tests\
+# End to end tests
+poetry run pytest .\tests_end_to_end\
+```
+
+### Option 2 - Docker
+```bash
+# Unit, integration and end to end tests
+docker compose -f .\docker-compose-dev.yml up --build
 ```
