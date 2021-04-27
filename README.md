@@ -104,5 +104,5 @@ poetry run pytest .\tests_end_to_end\
 ### Option 2 - Docker
 ```bash
 # Unit, integration and end to end tests
-docker compose -f .\docker-compose-dev.yml up --build
+docker compose -f .\docker-compose-test.yml up --build
 ```
