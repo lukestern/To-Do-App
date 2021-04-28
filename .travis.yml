@@ -3,6 +3,7 @@ services:
 
 script:
 - docker build --target test --tag todo-app:test .
-- docker run -p 5000:5000 --env-file ./.env.test todo-app:test tests
+- docker run --env-file .env.test todo-app:test tests
+- docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION todo-app:test tests_end_to_end
 - docker build --target production --tag todo-app:prod .
 - docker run -d -p 5000:5000 -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION todo-app:prod
