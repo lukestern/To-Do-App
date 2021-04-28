@@ -1,3 +1,6 @@
+services:
+- docker
+
 script:
 - docker build --target production --tag todo-app:prod .
-- docker run -d -p 5000:5000 --env-file ./.env todo-app:prod
+- docker run -d -p 5000:5000 -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION todo-app:prod
