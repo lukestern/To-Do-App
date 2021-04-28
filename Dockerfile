@@ -21,7 +21,7 @@ ENTRYPOINT poetry run flask run -h 0.0.0.0 -p 5000
 FROM base as test
 RUN poetry install
 # Get Chrome
-RUN apt update && apt-get install curl unzip -y
+RUN apt-get update && apt-get install curl unzip -y
 RUN curl -sSL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o chrome.deb &&\
     apt install ./chrome.deb -y &&\
     rm ./chrome.deb
@@ -31,4 +31,4 @@ RUN LATEST=`curl -sSL https://chromedriver.storage.googleapis.com/LATEST_RELEASE
     unzip ./chromedriver.zip
 COPY . /app/
 
-ENTRYPOINT poetry run pytest
+ENTRYPOINT [ "poetry", "run", "pytest" ]
