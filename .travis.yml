@@ -1,7 +1,7 @@
 services:
 - docker
 script:
-- docker build --cache-from --target test --tag $DOCKER_USER/todo-app:test .
+- docker build --target test --tag $DOCKER_USER/todo-app:test .
 - docker run --env-file .env.test $DOCKER_USER/todo-app:test tests
 - docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION $DOCKER_USER/todo-app:test
   tests_end_to_end
