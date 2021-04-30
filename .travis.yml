@@ -1,13 +1,16 @@
 services:
 - docker
 script:
-- docker build --target test --tag todo-app:test .
-- docker run --env-file .env.test todo-app:test tests
+- echo $DOCKER_PASSWD | docker login --username $DOCKER_USER --password-stdin
+- docker pull $DOCKER_USER/todo-app:test
+- docker build --cache-from $DOCKER_USER/todo-app:test --target test --tag $DOCKER_USER/todo-app:test .
+- docker run --env-file .env.test $DOCKER_USER/todo-app:test tests
 - docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION todo-app:test
   tests_end_to_end
 after_success:
-- echo $DOCKER_PASSWD | docker login --username $DOCKER_USER --password-stdin
-- docker build --target production --tag $DOCKER_USER/todo-app:latest .
+- docker push $DOCKER_USER/todo-app:test
+- docker pull $DOCKER_USER/todo-app:latest
+- docker build --cache-from $DOCKER_USER/todo-app:latest --target production --tag $DOCKER_USER/todo-app:latest .
 - docker tag $DOCKER_USER/todo-app:latest $DOCKER_USER/todo-app:$TRAVIS_COMMIT
 - docker push $DOCKER_USER/todo-app:latest
 - docker push $DOCKER_USER/todo-app:$TRAVIS_COMMIT
