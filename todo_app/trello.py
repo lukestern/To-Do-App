@@ -13,6 +13,7 @@ class Trello:
         self.token = os.environ.get('TRELLO_TOKEN')
         self.url = 'https://api.trello.com/1/'
         self.board = os.environ.get('TRELLO_BOARD_ID')
+        self.workspace = os.environ.get('ID_ORGANIZATION')
         self.list_ids = self.get_card_list_ids()
 
     def make_api_call_and_check_response(self, path, method='get', data=None):
@@ -75,7 +76,7 @@ class Trello:
         return board
 
     def create_board(self, name):
-        data = dict(name = name)
+        data = dict(name = name, idOrganization = self.workspace)
         path = f"boards"
         return self.make_api_call_and_check_response(path, method='post', data=data)
 
