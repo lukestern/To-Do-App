@@ -6,8 +6,6 @@ services:
         dockerfile: Dockerfile
         target: test
     image: todo-app:test
-    ports: 
-        - "5001:5001"
     env_file: ./.env.test
     entrypoint: poetry run pytest tests
   todo-app-tests-end-to-end:

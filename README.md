@@ -38,6 +38,7 @@ Trello is used to store the tasks displayed in the app.
 - Add your token to .env. https://trello.com/1/token/approve
 - Create a Trello board. https://trello.com/en-GB/guide/create-a-board
 - Add your board ID to .env. This can be found in the URL of your board. (https://trello.com/b/<board_id>/to-do-app)
+- Add the workspace ID to .env. Go to the workspace in which your board exists. Go to workspace 'Setting' -> 'Edit Workspace details' -> 'Short name'.
 
 ### VirtualBox
 
