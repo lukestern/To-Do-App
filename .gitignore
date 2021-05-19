@@ -114,6 +114,9 @@ dmypy.json
 ### macOS ###
 .DS_Store
 
+### Vagrant ###
+.vagrant/
+
 ### Virtual environment ###
 env/
 .venv/
