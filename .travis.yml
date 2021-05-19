@@ -6,8 +6,6 @@ script:
 - docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION todo-app:test
   tests_end_to_end
 - docker build --target production --tag todo-app:prod .
-- docker run -d -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION
-  todo-app:prod
 env:
   global:
   - secure: fxSu16Yc/CQC460G8z0ooa6OD7Eg7v4s+AOLl7y1OsQaEzOYg0wdY3YsxCKx8pJKroZSwfbpeRGILV3sqqzp6n9L8cwd6XdhAGswe/eK7rBL/VnfytJ/LtzIJvFSMJgNHb4a6NxzM4mDjCV4KM9RI1iiE/spvt9zGhB7YPXB+p263hkOESfj9iqZf8BFAiT3AY95YtTWN2SzjpAFn8L2UuUZkHjtOA3gqiDnvCAonhuVnGasG1Ea/mVLoJT90onudZNZevl7rXgTXGgKQeYaHu/51y2q4xT6w+1B88Jbk5LmZp7hDrozSM7MVlP45zuW28WtHmZsWiJ/55UPmMDrXj55CGQYFfhTBK7xr7vtFERaFPA1sfuRZe4+P+JjlblzsQ/gEvD8L6ik3i3hM/SSkCxmmGAwdxcDGMhDeBfwtdmoM2mRgkr+cc5OJO4s/lKqxWkNpBjaKSqQZxavYHJS7Gp6NQL28JjgOS4sse7HrB5dxsUcfXpi1pdNuQy2Az99IPwIoHXTq7NwHdcWyP203ub/SRakcSrsDCq6Q//f33Tqr3Rg5qoeGXgFNdto1PQa0gNGpz8Kv3BTkW9XiPJ8JF7AYvwkymvrfeHZ05HOl7L2w4LxBIyAN/HtI5QAMqEwlgBKjWF2AkvNmbQlrW2VCrxdxxA2HqnIG3Dv10rrcUM=
