@@ -1,6 +1,6 @@
 from werkzeug.exceptions import HTTPException
-from types import MethodDescriptorType
 from dotenv import load_dotenv
+from datetime import datetime
 import requests
 import itertools
 import os 
@@ -27,8 +27,8 @@ class Trello:
         '''
         Returns a dictionary where keys are the list names and the values are list ids.
         '''
-        url = f"boards/{self.board}/lists"
-        result = self.make_api_call_and_check_response(url)
+        path = f"boards/{self.board}/lists"
+        result = self.make_api_call_and_check_response(path)
         if result:
             lists = {}
             for lis in result:
@@ -39,11 +39,11 @@ class Trello:
         '''
         Returns list of card dictionaries.
         '''
-        url = f"lists/{list_id}/cards"
-        result = self.make_api_call_and_check_response(url)
+        path = f"lists/{list_id}/cards"
+        result = self.make_api_call_and_check_response(path)
         cards = []
         for res in result:
-            cards.append(dict((k, res[k]) for k in ('id', 'name', 'idList') if k in res))
+            cards.append(dict((k, res[k]) for k in ('id', 'name', 'idList', 'dateLastActivity') if k in res))
         return cards
 
     def get_all_cards(self):
@@ -54,17 +54,39 @@ class Trello:
 
     def move_card_to_list(self, card_id, card_status):
         data = dict(idList = self.list_ids[card_status])
-        url = f"cards/{card_id}"
-        return self.make_api_call_and_check_response(url, method='put', data=data)
+        path = f"cards/{card_id}"
+        return self.make_api_call_and_check_response(path, method='put', data=data)
 
     def create_new_card(self, name):
         data = dict(idList = self.list_ids['Not Started'], name = name)
-        url = f"cards"
-        return self.make_api_call_and_check_response(url, method='post', data=data)
+        path = f"cards"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
 
     def delete_card(self, card_id):
-        url = f"cards/{card_id}"
-        return self.make_api_call_and_check_response(url, method='delete')
+        path = f"cards/{card_id}"
+        return self.make_api_call_and_check_response(path, method='delete')
+
+    def create_board_with_lists(self, name):
+        board = self.create_board(name)
+        names = ['Not Started', 'In Progress', 'Complete']
+        for name in names:
+            self.create_list(board['id'], name)
+
+        return board
+
+    def create_board(self, name):
+        data = dict(name = name)
+        path = f"boards"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
+
+    def delete_board(self, board_id):
+        path = f"boards/{board_id}"
+        return self.make_api_call_and_check_response(path, method='delete')
+
+    def create_list(self, board_id, name):
+        data = dict(name = name)
+        path = f"boards/{board_id}/lists"
+        return self.make_api_call_and_check_response(path, method='post', data=data)
 
 
 class Task:
@@ -72,6 +94,7 @@ class Task:
         self.id = trello_card_dict['id']
         self.title = trello_card_dict['name']
         self.idList = trello_card_dict['idList']
+        self.last_active = datetime.strptime(trello_card_dict['dateLastActivity'], '%Y-%m-%dT%H:%M:%S.%fZ')
         self.status = self.get_status_from_list_id(list_ids)
 
     def get_status_from_list_id(self, list_ids):
