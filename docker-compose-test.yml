@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  todo-app-tests:
+    build: 
+        context: .
+        dockerfile: Dockerfile
+        target: test
+    image: todo-app:test
+    env_file: ./.env.test
+    entrypoint: poetry run pytest tests
+  todo-app-tests-end-to-end:
+    build: 
+        context: .
+        dockerfile: Dockerfile
+        target: test
+    image: todo-app:test
+    ports: 
+        - "5000:5000"
+    env_file: ./.env
+    entrypoint: poetry run pytest tests_end_to_end
