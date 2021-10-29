@@ -9,7 +9,7 @@ RUN pip install poetry && poetry config virtualenvs.create false
 FROM base as production
 RUN poetry install --no-dev --no-root
 COPY . /app/
-ENTRYPOINT poetry run gunicorn -b 0.0.0.0:5000 'todo_app.app:create_app()'
+ENTRYPOINT entrypoint.sh
 
 
 FROM base as development
