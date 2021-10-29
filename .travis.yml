@@ -13,11 +13,11 @@ after_success:
 - docker tag $DOCKER_USER/todo-app:latest $DOCKER_USER/todo-app:$TRAVIS_COMMIT
 - docker push $DOCKER_USER/todo-app:latest
 - docker push $DOCKER_USER/todo-app:$TRAVIS_COMMIT
-deploy:
-  provider: script
-  script: bash ./heroku-deploy.sh
-  on:
-    branch: Module-8-Exercise
+- heroku container:login
+- docker tag $DOCKER_USER/todo_app registry.heroku.com/$HEROKU_APP/web
+- echo $HEROKU_KEY | docker login --username=_ --password-stdin registry.heroku.com
+- docker push registry.heroku.com/"${HEROKU}"/web
+- heroku container:release web --app "${HEROKU_APP}"
 env:
   global:
   - DOCKER_USER: toastyluke
