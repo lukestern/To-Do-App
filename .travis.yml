@@ -16,8 +16,6 @@ after_success:
 - docker tag $DOCKER_USER/todo_app registry.heroku.com/$HEROKU_APP/web
 - echo $HEROKU_KEY | docker login --username=_ --password-stdin registry.heroku.com
 - docker push registry.heroku.com/$HEROKU/web
-- heroku login
-- heroku container:login
 - heroku container:release web --app $HEROKU_APP
 env:
   global:
