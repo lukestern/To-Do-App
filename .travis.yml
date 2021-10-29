@@ -1,23 +1,3 @@
-services:
-- docker
-script:
-- docker build --target test --tag $DOCKER_USER/todo-app:test .
-- docker run --env-file .env.test $DOCKER_USER/todo-app:test tests
-- docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION $DOCKER_USER/todo-app:test
-  tests_end_to_end
-after_success:
-- echo $DOCKER_PASSWD | docker login --username $DOCKER_USER --password-stdin
-- docker pull $DOCKER_USER/todo-app:latest
-- docker build --cache-from $DOCKER_USER/todo-app:latest --target production --tag
-  $DOCKER_USER/todo-app:latest .
-- docker tag $DOCKER_USER/todo-app:latest $DOCKER_USER/todo-app:$TRAVIS_COMMIT
-- docker push $DOCKER_USER/todo-app:latest
-- docker push $DOCKER_USER/todo-app:$TRAVIS_COMMIT
-- docker tag $DOCKER_USER/todo_app registry.heroku.com/$HEROKU_APP/web
-- heroku container:login
-- docker login --username=_ --password=$HEROKU_KEY registry.heroku.com
-- docker push registry.heroku.com/$HEROKU/web
-- heroku container:release web --app $HEROKU_APP
 env:
   global:
   - DOCKER_USER: toastyluke
@@ -28,7 +8,36 @@ env:
   - secure: iU4T1WHEH3xZPuJWbPLEq/t/bfWoKhaujAQcTIkSEG63TJX5eTrLZZy8IEqwzPHasDUMZPjHrAHSJx6tiXRCwdITEzICBySDLNQfLGX7h2X5OSFj/r9R9zWkwbihsG9N9CZ8+jX2btiUH01l0sqM0SoKnlfLqBF6oeYsNinyHNgOmPDtZjdDflQK8Saoos0yE3uwExfGTVxjK36zox8qyK3I5hGGmLE91fQP/hKov88H80qrcdsjOi35nktN2G0CdXEdGmXGzkT+iJ9UFXjB0X85Q3lLrvF1Rli0toPpHnQXNDeRmW+EEE4tnjUL02qTQtV/lfVMqD4R26I58U4HGgv1WebKYyIwAwTJ6xqoR+qtw3KXYuevMqtH0SqihO6T1/J09paC5sAea+zxwRgFCt0/k8CkG3jNayeoGcj26+owMLibMefD1V12miENfxrCjqcWH5T8TiynkKaqRtjfZkwSuqFxteO16U/vAx/DZLJ/Q4kUk5X3b9T+ScxRDzEYL0VRfmgL836weBwR5GHY1fKv4wHTgFUAf9Wwm/Y8VUhKOGoyyYHwpJ+/kS6IKMJoeHm6CNeEvjUBaz+wZ8UrPPMJZ2MQE9rhyEOFwHIHPyVbMpkpxNUHn2mhNuS7S7txCAVl/IWKEE8KFx8W/vfW1WcbkCfeFS8m2/FN0zPiy2M=
   - secure: kxTqr+zEG/JE3gg0QqEoB8BMTzqJyvXjQjgWUz8bxJ0X9KGeIMleJh5fD6/AYSnhtWZ+nak0dwY3SUI1peVKRg7hBIyLsCBOWMr9fBk3zH5A9IaeT6I8JbQ2hZFfQNtNIG8C4zHMPIdr3TgoIktQNvMDF16hsGC9FFVuddbesff8obzm3E8kc9B5FZAJ6x7CCg4c/kYhKAyoULeJvVxKZVR2AjapOzUUvsOQiltrBDrjytjZEenM3ke7YcvvhFRgaBtxiJEbeCgSZIgmOg5rc6qSAYXACVCYnhxsduTXq7F9Ll9PLigy5KvDEcBjcvHm4BBnYZaoPLL6Dn8EugAh0vcLHeHjW0i8k0C34meGepe2eRb8CJu7sgLNQawJ/MIqwSyARJT1XjzM5Me73b16rjS1p6FfVHTk3GwbOOFspP8/kw4+0DMKpsQu7BOnNjaFv2Qyyak2LGj6OE0k35Yxwg1qV9ioWjbuLeX1gtrjDxcG3X2UW8bhzWEkS3YyqM63mnp2EHQ7UTFgLdVX4kHzUjpuhVCq7N8dGRfntWV8tEvMEDoFSoiROaIAltfIz4otOw2/+f6n7sCQD+jknM2Ak6l6LZFRubHjyoeHJHa7Nf5uy12jF0DAuoJCYEIq8b5UHLTJv6y0xv5WzkDELozaEveJOI9jRwoBAdAbASOO7eo=
   - secure: N+Ph904uBy5IAcCobswEh/u/7gN9VP1hL1Jt413xwjv4ZuKuGkczM8gDnsRMMBJuD0h/6gtE2Z6dd+brdJPowwDf8VggG/JOSF20Hb4ponM3OMNIRCsnFOo0rjcfGZE/BTIX0NqsF88gk0Nt6GtAerFKcAw/HnxuAQp3fq9ejhEFJewWj9ZE+eLcPZ04dQUIreypfbRO74B3jZ4RlDaRbiPnlWmQgoVi7YHw7HetHY9oe7DDEdyujgMw7vZEgmTRGsgG4ORJiWdDRaZc4yf9AXfQyZ5HHs0Zz/pjJtaGO3skQOjPwI6bkcXhiUi5HApdb3HmvFFxAuQjHwz45tTRYn1lj+MS39WsNgDUTyQOh8pKEKYNybi9Y/qQUocB26ZBq5NZmGKn5kZBFq3XV2VDjA11v+0/orN7TDgCGAUUsSwXePfNF3kT4AZSaSDF9mIyEbpF9mMRcsQYsbOSDiyYnGa2+6zQyP7NBXIaj3RiyYWKGOOBa1ikNAO9arMBMbQMnwd9X1rjaCmQFSz5IpXK5ahiVwwFuNyeOmJDIv9Srsbz7vQ8fxGMyPiGrONBG/WtkNxvT2qYTxmHG1N4PTecBxxJyaMJ2gm1DkfJi2xmEwoS8Mc6ib3+zX6cZKhIdaWYiJnwsaJbnAdrbqHpQ6V1Q8zLf2Olrh7QtrrAI2yaq6E=
-  - secure: AOueR76gdIRXxcwmFSFxmhfuiFmGpBsW7s6FLzn5NIUQKDjUO5Y4Dv49U+K4FP5Gtzzps1fnuMWWi4VOxMPo18AcV8zl42tbR1ofgEhRcEYVC+CSPD+sPzM3y0SsO04rs/bULPBGNbNPDdcvvtvTW6jDCuk5vlwHcqcWgaumw6BsCnsy27ENIn33oTEXLCXPzj6AXw35jQajeV4fURJGl+x3nr8X1meanmHozzamds1ANxkjbtWputfhP4j4i58Ks5HsyFeRPju77P+y9K6LyWaf8VF2wNUXS823hJPfgq9ncYA+oJrM2XTW2NSMe9Ebnko2kHS2BuNxkIZi+JchhBl/igAk7gw8dCxCWdWyVhz1no4e+rpJzoRo/x3Erx/H0XFjdMBSY111P9yrZWjtTr2iny0a8NGASJ/sITLoiOqAfkZgZX3Wgj6514KMnFp0GDk9Yp02+/QPBj2HiWvs15aB/FBRxv7j12DuM1ubr81lOrolUB54hAMUsP4R5l5fa0w+RdoTNW6VoVm4Xp/EWkv/Ev+BZj8NUZTHcirNtf/lmMLRcajre84eC2O5sxWhjFv/gxi+4QPpxStpZXFmiggg8kxtlKXYqubpv9k94g3vEMeFpwQaIkXt6s646JQeGfLDegtYgwfdNIZB+L/4hEvtiuGlOQkVVvx1+8hUJbo=
+
+services:
+- docker
+
+script:
+- docker build --target test --tag $DOCKER_USER/todo-app:test .
+- docker run --env-file .env.test $DOCKER_USER/todo-app:test tests
+- docker run -e TRELLO_BOARD_ID -e TRELLO_KEY -e TRELLO_TOKEN -e ID_ORGANIZATION $DOCKER_USER/todo-app:test
+  tests_end_to_end
+
+after_success:
+- echo $DOCKER_PASSWD | docker login --username $DOCKER_USER --password-stdin
+- docker pull $DOCKER_USER/todo-app:latest
+- docker build --cache-from $DOCKER_USER/todo-app:latest --target production --tag
+  $DOCKER_USER/todo-app:latest .
+- docker tag $DOCKER_USER/todo-app:latest $DOCKER_USER/todo-app:$TRAVIS_COMMIT
+- docker push $DOCKER_USER/todo-app:latest
+- docker push $DOCKER_USER/todo-app:$TRAVIS_COMMIT
+- docker tag $DOCKER_USER/todo_app registry.heroku.com/$HEROKU_APP/web
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: gHIDdLrI4zE6xVLWF+dpevj6wixO3YrWVo3T22VKQU/Qk48+erowXL1mmP658X0+GI5uLKDpvkTs97so+28+yGl0NIQwC+1FImmnqVoKrQhHoJVKjCGSetCZp1c71E/c0Tpmmd6ApeuPDs6UKg7rnNLhNpTH7INjch3OtqymxS8qS3mFULehF936PpLyzlsWc6aO0KpUrudXgTFFUDA4FAkndpI22bA2AiaPAZkBvIpHJ+qZnLrpH7/DkwlCPPDIttm9yO0sFymR1s/55z0A/W1ZLXfMCRUobL0MaCAjTJ8/0YQvnK583BsQXSFUPwQGVYI5uUIm9/4Zoprgx7ZN27bEHIjEB6Meq3PUUCn05zbC1npfKa6TC0+xgx8Ij0lhlZko6tnvx42kQvGctMUM5SCW+m5OpKiVZ8rpqdEjUg6iNFGiciyZVPpSckKWTg30GwwDbrsU2hWfbCZxmXSgx9kVI5fDJ/uH0Jeh+HpcffqBUgg47rViaZmbwG1vMmc2c11k+o4xrVeoSei7IYVSC/NUN4fasqix2dv/q2KGPwUQdNMqST8zPkIpnaamCkAx3IB/nQ+gFcfdzwCG193NIsDej3fAJ00BXbRgg4nqFzSZqZUSJWEL/33QtWBjc3hoBL7xasxDXqjzAJAEM7qrPgiGikO44LGNMPPJOG2Agps=
+  app: todo-las
+  on:
+    repo: lukestern/To-Do-App
+    branch: Module-8-Exercise
+  skip_cleanup: 'true'
+
 notifications:
   slack:
     secure: aK5ycpRhw4sf4a6M/graRjgAXK5UkasRjErYiyPGP405OjhFoGsrpU5Xi689l6TPMs0pq9R0U20f67jn0JrR2z9dXx+JSjZKFWiZGlhmwPsMJ32kNDr7Lr3GozFlbDrzAtQd3yorVenvUPiZqBASY5TbMXPHDI/vRgUwFAa37nT/j/mFvuk9cr2QX8NUXt4cUxqfGLkJJiniw0IkwKyV4P8ub+uahIpUjW+GmQhogO0Pplv4/L9y7rz7x7u+RoCPRX11t/YPgDd3RA16dO23w0hUa3EZ4HjGzTe44NxlatQQ6MHrFUQh4/t74rl+grbPD/5ZacTT6+A/AITIPh96IujgpKNuWmwNCgNMKDyHWJEwkfbWI3UO40JFUnYLvlX0j8lfMwqqB2q/+SlwINbVJK+HQbNlAm5guVsyrKcl7fEvg6w51WQYZ1ishB/1oMUkC0FEW5raHS7m+JnaRAQ2FMsUeygsUA434KUjGU8FF+FoaGYXhogCRY8gOh/aJaUwOh59x89Y4ZPYSLt6UYCGgGE6ESDyqmLqGmecsRzvhijSVBl8BQbrpbXuWl3IB3YBZKx2PiANTu0edNBt2TZ5bW2SBQr7jvbfqX+1riSX/OMgWGG0T2yK8Lpf4ytQz4HLalLUh96K/5yR11WZL49k7JVfFd8XnX0oB5okQF4Kmmw=
