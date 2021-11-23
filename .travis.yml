@@ -26,17 +26,12 @@ after_success:
 - docker tag $DOCKER_USER/todo-app:latest $DOCKER_USER/todo-app:$TRAVIS_COMMIT
 - docker push $DOCKER_USER/todo-app:latest
 - docker push $DOCKER_USER/todo-app:$TRAVIS_COMMIT
-- docker tag $DOCKER_USER/todo_app registry.heroku.com/$HEROKU_APP/web
 
 deploy:
-  provider: heroku
-  api_key:
-    secure: gHIDdLrI4zE6xVLWF+dpevj6wixO3YrWVo3T22VKQU/Qk48+erowXL1mmP658X0+GI5uLKDpvkTs97so+28+yGl0NIQwC+1FImmnqVoKrQhHoJVKjCGSetCZp1c71E/c0Tpmmd6ApeuPDs6UKg7rnNLhNpTH7INjch3OtqymxS8qS3mFULehF936PpLyzlsWc6aO0KpUrudXgTFFUDA4FAkndpI22bA2AiaPAZkBvIpHJ+qZnLrpH7/DkwlCPPDIttm9yO0sFymR1s/55z0A/W1ZLXfMCRUobL0MaCAjTJ8/0YQvnK583BsQXSFUPwQGVYI5uUIm9/4Zoprgx7ZN27bEHIjEB6Meq3PUUCn05zbC1npfKa6TC0+xgx8Ij0lhlZko6tnvx42kQvGctMUM5SCW+m5OpKiVZ8rpqdEjUg6iNFGiciyZVPpSckKWTg30GwwDbrsU2hWfbCZxmXSgx9kVI5fDJ/uH0Jeh+HpcffqBUgg47rViaZmbwG1vMmc2c11k+o4xrVeoSei7IYVSC/NUN4fasqix2dv/q2KGPwUQdNMqST8zPkIpnaamCkAx3IB/nQ+gFcfdzwCG193NIsDej3fAJ00BXbRgg4nqFzSZqZUSJWEL/33QtWBjc3hoBL7xasxDXqjzAJAEM7qrPgiGikO44LGNMPPJOG2Agps=
-  app: todo-las
   on:
-    repo: lukestern/To-Do-App
     branch: Module-8-Exercise
-  skip_cleanup: 'true'
+  provider: script
+  script: ./deploy.sh
 
 notifications:
   slack:
