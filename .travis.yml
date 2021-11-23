@@ -31,7 +31,7 @@ deploy:
   on:
     branch: Module-8-Exercise
   provider: script
-  script: ./deploy.sh
+  script: bash ./deploy.sh
 
 notifications:
   slack:
