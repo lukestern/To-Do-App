@@ -9,7 +9,7 @@ RUN pip install poetry && poetry config virtualenvs.create false
 FROM base as production
 RUN poetry install --no-dev --no-root
 COPY . /app/
-ENTRYPOINT ./entrypoint.sh
+ENTRYPOINT bash ./entrypoint.sh
 
 
 FROM base as development
