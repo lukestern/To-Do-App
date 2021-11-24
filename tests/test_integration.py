@@ -1,5 +1,3 @@
-import pymongo
-from pymongo.mongo_client import MongoClient
 from tests.data import sample_data
 from dotenv import find_dotenv, load_dotenv
 from todo_app import app
@@ -14,7 +12,7 @@ def client(monkeypatch):
     file_path = find_dotenv('.env.test')
     load_dotenv(file_path, override=True)
 
-    monkeypatch.setattr(pymongo, 'MongoClient', mongomock.MongoClient)
+    monkeypatch.setattr(MongoService, '_connect_to_client', mongomock.MongoClient)
     test_app = app.create_app()
 
     with test_app.test_client() as client:
