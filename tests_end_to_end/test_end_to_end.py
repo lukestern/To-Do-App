@@ -1,4 +1,4 @@
-from todo_app.trello import Trello
+from todo_app.mongo_service import MongoService
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
@@ -6,15 +6,11 @@ from threading import Thread
 from todo_app import app
 import pytest
 import time
-import os
 
 
 @pytest.fixture(scope="module")
 def test_app():
-    board_id = Trello().create_board_with_lists('Test_Board')['id']
-    os.environ['TRELLO_BOARD_ID'] = board_id
-
-    application = app.create_app()
+    application = app.create_app('test-db')
 
     thread = Thread(target=lambda: application.run(use_reloader=False))
     thread.daemon = True
@@ -22,7 +18,7 @@ def test_app():
     yield app
 
     thread.join(1)
-    Trello().delete_board(board_id)
+    MongoService.delete_database('test-db')
 
 
 @pytest.fixture(scope="module")

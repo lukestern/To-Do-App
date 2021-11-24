@@ -1,4 +1,4 @@
-FROM python:3.9.4-slim-buster as base
+FROM python:3.10.0-slim-buster as base
 
 WORKDIR /app
 EXPOSE 5000

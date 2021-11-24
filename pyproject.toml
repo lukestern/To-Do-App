@@ -13,6 +13,7 @@ pytest = "^6.2.3"
 selenium = "^3.141.0"
 gunicorn = "^20.1.0"
 pymongo = {extras = ["srv"], version = "^3.12.1"}
+mongomock = "^3.23.0"
 
 [tool.poetry.dev-dependencies]
 

@@ -1,8 +1,12 @@
-from tests.data import get_trello_responses, list_ids_trello_response
+import pymongo
+from pymongo.mongo_client import MongoClient
+from tests.data import sample_data
 from dotenv import find_dotenv, load_dotenv
 from todo_app import app
-import requests
 import pytest
+import mongomock
+from todo_app.mongo_service import MongoService
+from todo_app.task import Task
 
 
 @pytest.fixture
@@ -15,37 +19,13 @@ def client():
     with test_app.test_client() as client:
         yield client
 
-class MockResponse(object):
-    def __init__(self):
-        self.status_code = 200
-        self.url = 'http://trello-test.com'
-        self.ok = True
-
-class MockCardResponse(MockResponse):
-    def __init__(self):
-        super().__init__()
-
-    def json(self):
-        return get_trello_responses(1)
-
-class MockListResponse(MockResponse):
-    def __init__(self):
-        super().__init__()
-
-    def json(self):
-        return list_ids_trello_response
-
-
 @pytest.fixture
 def mock_request(monkeypatch):
-
-    def mock_response(*args, **kwargs):
-        if  "boards/fake_id/lists" in args[1]:
-            return MockListResponse()
-        if  "cards" in args[1]:
-            return MockCardResponse()
+    def mock_tasks(*args, **kwargs):
+        return [Task(task) for task in sample_data]
             
-    monkeypatch.setattr(requests, 'request', mock_response)
+    monkeypatch.setattr(MongoService, 'get_tasks', mock_tasks)
+    monkeypatch.setattr(pymongo, 'MongoClient', mongomock.MongoClient)
 
 
 def test_index_page(mock_request, client):
@@ -54,6 +34,6 @@ def test_index_page(mock_request, client):
     assert 'Not Started' in response.data.decode()
     assert 'In Progress' in response.data.decode()
     assert 'Complete' in response.data.decode()
-    assert 'Test-0' in response.data.decode()
     assert 'Test-1' in response.data.decode()
     assert 'Test-2' in response.data.decode()
+    assert 'Test-3' in response.data.decode()
