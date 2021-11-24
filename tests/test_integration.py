@@ -10,10 +10,11 @@ from todo_app.task import Task
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
     file_path = find_dotenv('.env.test')
     load_dotenv(file_path, override=True)
 
+    monkeypatch.setattr(pymongo, 'MongoClient', mongomock.MongoClient)
     test_app = app.create_app()
 
     with test_app.test_client() as client:
@@ -25,7 +26,6 @@ def mock_request(monkeypatch):
         return [Task(task) for task in sample_data]
             
     monkeypatch.setattr(MongoService, 'get_tasks', mock_tasks)
-    monkeypatch.setattr(pymongo, 'MongoClient', mongomock.MongoClient)
 
 
 def test_index_page(mock_request, client):
