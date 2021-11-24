@@ -30,15 +30,13 @@ You'll also need to clone a new `.env` file from the `.env.template` to store lo
 $ cp .env.template .env  # (first time only)
 ```
 
-### Trello Setup 
+### MongoDB Atlas Setup 
 
-Trello is used to store the tasks displayed in the app. 
-- Set up an account on Trello. https://trello.com/signup
-- Add your API key to .env. https://trello.com/app-key
-- Add your token to .env. https://trello.com/1/token/approve
-- Create a Trello board. https://trello.com/en-GB/guide/create-a-board
-- Add your board ID to .env. This can be found in the URL of your board. (https://trello.com/b/<board_id>/to-do-app)
-- Add the workspace ID to .env. Go to the workspace in which your board exists. Go to workspace 'Setting' -> 'Edit Workspace details' -> 'Short name'.
+- Create a free account. https://www.mongodb.com/try
+- Create a cluster using free tier options.
+-- Create a database user with password authentication.
+- Add the database username, password and cluster name to .env
+- Put a database name into .env, this does not have to already exist it will be created on the cluster once the first task is added. 
 
 ### VirtualBox
 
